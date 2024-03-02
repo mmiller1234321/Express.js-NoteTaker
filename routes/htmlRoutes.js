@@ -1,16 +1,16 @@
-const path = require('path'); // Change import to require
-const { Router } = require('express'); // No need to change this line
+const path = require('path');
+const { Router } = require('express');
 
 const router = Router();
 
 // "/notes" responds with the notes.html file
-router.get('/notes', (res) => { 
-  res.sendFile(path.join(__dirname, '../public/assets/notes.html'));
+router.get('/notes', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/notes.html'));
 });
 
 // All other routes respond with the index.html file
-router.get('*', (res) => {
-  res.sendFile(path.join(__dirname, '../public/assets/index.html'));
+router.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-module.exports = router; // Change export to module.exports
+module.exports = router;
