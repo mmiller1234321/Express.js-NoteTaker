@@ -1,31 +1,33 @@
-const express = require('express');
-const path = require('path');
-const api = require('./routes/index.js');
+const express = require('express'); // Import Express.js framework
+const path = require('path'); // Import path module for file paths
+const api = require('./routes/index.js'); // Import API routes
 
-// Initialize the app and create a port
-const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001; // Set port for the server
 
-// Set up body parsing, static, and route middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.use('/api', api);
+const app = express(); // Create Express application instance
 
-//route for home page
+// Middleware for parsing JSON and urlencoded form data
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
+app.use('/api', api); 
+
+app.use(express.static('public')); // Serve static files from the 'public' directory
+
+// GET Route for homepage
 app.get('/', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/index.html'))
+  res.sendFile(path.join(__dirname, '/public/index.html')) // Send the index.html file as response
 );
 
-//route for notes page
+// GET Route for notes page
 app.get('/notes', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/notes.html'))
+  res.sendFile(path.join(__dirname, '/public/notes.html')) // Send the notes.html file as response
 );
 
-//Wildcard route to direct users to index
+// Wildcard route to redirect users to the index
 app.get('*', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/index.html'))
-);  
+  res.sendFile(path.join(__dirname, 'public/index.html')) // Send the index.html file for all other routes
+);
 
-// Start the server on the port
-app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`App listening at http://localhost:${PORT}`) // Listen for connections on the specified port
+);

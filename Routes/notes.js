@@ -1,63 +1,73 @@
-//notes is used for modular routing purposes
+// Import Express.js framework for creating routers
 const notes = require('express').Router();
+
+// Import functions from fsUtils.js for file system operations
 const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
-//uuid is a node package that creates a unique id for each note so they can be identified by it
+
+// Import uuid package to generate unique IDs for notes
 const { v4: uuidv4 } = require('uuid');
+
+// Import fs module for file system operations
 const fs = require('fs');
 
-//GET request to read the db file containing notes
+// GET request to read the db file containing notes
 notes.get('/', (req, res) => {
+    // Read data from db.json file and send it as JSON response
     readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
   });
 
-//POST request to recieve notes and give them a unique id
+// POST request to receive notes and assign them a unique id
 notes.post('/', (req, res) => {
-    //deconstruct from request body
+    // Destructure title and text from request body
     const { title, text } = req.body;
-    //make note object and give it unique id using uuid
+    // Check if both title and text exist
     if (title && text) {
+      // Create a new note object with a unique id using uuid
       const newNote = {
         title,
         text,
         id: uuidv4(),
       };
-      //appends new note to db
+      // Append the new note to db.json file
       readAndAppend(newNote, './db/db.json');
+      // Send response indicating success
       res.json('Note added');
     } 
 });
 
-//DELETE request that removes an entry from the db.json file based on its unique note id
+// DELETE request that removes an entry from the db.json file based on its unique note id
 notes.delete('/:id', (req, res) => {
-  //creates a variable and assigns it the note id from the request parameters
+  // Assign note id from request parameters to a variable
   const noteId = req.params.id;
-  //reads from the database file
+  // Read data from the database file
   readFromFile('./db/db.json')
     .then((data) => JSON.parse(data))
     .then((json) => {
-      //result is populated by using the filter method to check the db.json and return only values that don't match the noteId. 
+      // Filter out notes that don't match the provided noteId
       const result = json.filter((note) => note.id !== noteId);
-
       return result;
     })
     .then((result) => {
-      //new variable that contains the filtered results and stringify them because fs.writeFile only passes strings not objects.
+      // Convert filtered results to a string because fs.writeFile only accepts strings, not objects
       const updatedData = JSON.stringify(result);
+      // Write updated data back to the db.json file
       fs.writeFile('./db/db.json', updatedData, (err) => {
-        //error for writefile
+        // Handle errors during file writing
         if (err) {
           console.error(err);
           res.status(500).json('Error deleting note');
           return;
         }
+        // Send response indicating success
         res.json('Note deleted');
       });
     })
-    //error for promise
+    // Handle errors from promises
     .catch((err) => {
       console.error(err);
       res.status(500).json('Error deleting note');
     });
 });
-//export statement for modularization
+
+// Export router for modularization
 module.exports = notes;
