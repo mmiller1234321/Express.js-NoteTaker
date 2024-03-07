@@ -25,7 +25,7 @@ app.get('/notes', (req, res) =>
 
 // Wildcard route to redirect users to the index
 app.get('*', (req, res) =>
-  res.sendFile(path.join(__dirname, 'public/index.html')) // Send the index.html file for all other routes
+  res.sendFile(path.join(__dirname, '/public/index.html')) // Send the index.html file for all other routes
 );
 
 app.listen(PORT, () =>
