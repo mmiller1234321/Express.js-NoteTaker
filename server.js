@@ -1,6 +1,6 @@
 const express = require('express'); // Import Express.js framework
 const path = require('path'); // Import path module for file paths
-const api = require('./routes/index.js'); // Import API routes
+const api = require('./Routes/index'); // Import API routes
 
 const PORT = process.env.PORT || 3001; // Set port for the server
 
