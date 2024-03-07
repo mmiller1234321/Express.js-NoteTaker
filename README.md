@@ -32,12 +32,6 @@ WHEN I click on the "New Note" button in the navigation at the top of the page
 THEN I am presented with empty fields to enter a new note title and the note’s text in the right-hand column and the button disappears
 ```
 
-## Mock-Up
-
-The following GIF shows the web application's appearance and functionality:
-
-![Existing notes are listed in the left-hand column with empty fields on the right-hand side for the new note’s title and text.](./Assets/11-express-homework-demo.gif)
-
 ## Deployed Application
 
 https://express-js-notetaker-3.onrender.com/notes
